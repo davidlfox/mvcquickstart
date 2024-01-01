@@ -55,9 +55,9 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5074982B7F5D4A9D9484B42AD737236D }}
           package: .
-          
+
       - name: Update database
         run: |
           dotnet tool install --global dotnet-ef
           dotnet tool restore
-          dotnet ef database update
+          dotnet ef database update -c MvcMovieContext -p mvc
