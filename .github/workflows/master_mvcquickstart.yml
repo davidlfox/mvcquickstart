@@ -36,6 +36,7 @@ jobs:
         run: |
           dotnet tool install --global dotnet-ef
           dotnet tool restore
+          dotnet --list-sdks
           dotnet ef
           dotnet ef migrations
           dotnet ef migrations script
