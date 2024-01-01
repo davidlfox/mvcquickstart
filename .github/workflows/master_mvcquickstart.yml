@@ -36,7 +36,7 @@ jobs:
         run: |
           dotnet tool install --global dotnet-ef
           dotnet tool restore
-          dotnet ef migrations script --idempotent --startup-project mvc.csproj --output ${{env.DOTNET_ROOT}}/myapp/migrate.sql
+          dotnet-ef migrations script --idempotent --startup-project mvc.csproj --output ${{env.DOTNET_ROOT}}/myapp/migrate.sql
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
