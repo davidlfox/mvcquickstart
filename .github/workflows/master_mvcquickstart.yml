@@ -27,6 +27,10 @@ jobs:
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      
+      - name: directory listing
+        run: |
+          ls -R .
 
       - name: Generate EF migration script
         run: |
