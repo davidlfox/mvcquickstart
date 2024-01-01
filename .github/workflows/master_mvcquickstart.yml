@@ -39,6 +39,7 @@ jobs:
 
       - name: Add dotnet tools to PATH
         run: |
+          echo $env.path
           ls -R ${{env.DOTNET_ROOT}}/tools
           echo ${{env.DOTNET_ROOT}}/tools | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
       
