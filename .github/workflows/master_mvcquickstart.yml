@@ -44,9 +44,9 @@ jobs:
       
       - name: update db
         run: |
+          echo $env.path
           dotnet ef
-          ${{env.DOTNET_ROOT}}\tools\dotnet-ef"
-          ${{env.DOTNET_ROOT}}\tools\dotnet ef"
+          ls ${{env.DOTNET_ROOT}}\tools
           dotnet ef migrations
           dotnet ef migrations script
           dotnet ef migrations script --idempotent --startup-project mvc.csproj --output ${{env.DOTNET_ROOT}}/myapp/migrate.sql
