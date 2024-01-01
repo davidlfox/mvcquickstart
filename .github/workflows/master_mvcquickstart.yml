@@ -60,4 +60,4 @@ jobs:
         run: |
           dotnet tool install --global dotnet-ef
           dotnet tool restore
-          dotnet ef database update -c MvcMovieContext -p ../../mvc.csproj
+          dotnet-ef database update
