@@ -28,6 +28,12 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+      - name: Generate EF migration script
+        run: |
+          dotnet tool install --global dotnet-ef
+          dotnet tool restore
+          dotnet ef migrations script --idempotent --startup-project mvc --output ${{env.DOTNET_ROOT}}/myapp/migrate.sql
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -55,13 +61,14 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5074982B7F5D4A9D9484B42AD737236D }}
           package: .
-      
+        
       - name: directory listing
         run: |
           ls -R .
-
-      - name: Update database
-        run: |
-          dotnet tool install --global dotnet-ef
-          dotnet tool restore
-          dotnet database update -c MvcMovieContext -p mvc -s mvc
+      
+      - name: Apply EF migration script
+        uses: Azure/sql-action@v1.2
+        with:
+          connection-string: ${{ secrets.MOVIE_CONNECTION_STRING }}
+          sql-file: ./migrate.sql
+        
