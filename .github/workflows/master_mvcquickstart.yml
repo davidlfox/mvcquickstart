@@ -36,7 +36,14 @@ jobs:
         run: |
           dotnet tool install --global dotnet-ef
           dotnet tool restore
-          dotnet --list-sdks
+
+      - name: Add dotnet tools to PATH
+        run: |
+          ls -R ${{env.DOTNET_ROOT}}/tools
+          echo ${{env.DOTNET_ROOT}}/tools | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+      
+      - name: update db
+        run: |
           dotnet ef
           dotnet ef migrations
           dotnet ef migrations script
