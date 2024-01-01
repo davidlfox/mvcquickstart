@@ -27,27 +27,15 @@ jobs:
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-      
-      - name: directory listing
-        run: |
-          ls -R .
 
       - name: Generate EF migration script
         run: |
           dotnet tool install --global dotnet-ef
           dotnet tool restore
-
-      # - name: Add dotnet tools to PATH
-      #   run: |
-      #     echo $env.path
-      #     echo ${{env.DOTNET_ROOT}}/tools | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
       
       - name: update db
         run: |
           echo ************* $env:path
-          dotnet ef
-          dotnet ef migrations
-          dotnet ef migrations script
           dotnet ef migrations script --idempotent --startup-project mvc.csproj --output ${{env.DOTNET_ROOT}}/myapp/migrate.sql
 
       - name: Upload artifact for deployment job
@@ -77,10 +65,6 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5074982B7F5D4A9D9484B42AD737236D }}
           package: .
-        
-      - name: directory listing
-        run: |
-          ls -R .
       
       - name: Apply EF migration script
         uses: Azure/sql-action@v1.2
