@@ -37,15 +37,16 @@ jobs:
           dotnet tool install --global dotnet-ef
           dotnet tool restore
 
-      - name: Add dotnet tools to PATH
-        run: |
-          echo $env.path
-          ls -R ${{env.DOTNET_ROOT}}/tools
-          echo ${{env.DOTNET_ROOT}}/tools | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+      # - name: Add dotnet tools to PATH
+      #   run: |
+      #     echo $env.path
+      #     echo ${{env.DOTNET_ROOT}}/tools | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
       
       - name: update db
         run: |
           dotnet ef
+          ${{env.DOTNET_ROOT}}\tools\dotnet-ef"
+          ${{env.DOTNET_ROOT}}\tools\dotnet ef"
           dotnet ef migrations
           dotnet ef migrations script
           dotnet ef migrations script --idempotent --startup-project mvc.csproj --output ${{env.DOTNET_ROOT}}/myapp/migrate.sql
