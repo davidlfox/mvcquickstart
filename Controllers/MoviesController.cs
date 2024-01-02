@@ -6,21 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Data;
+using System.Runtime.CompilerServices;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 
 namespace mvc.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly MvcMovieContext _context;
+        private readonly TelemetryClient _telemetryClient;
 
-        public MoviesController(MvcMovieContext context)
+        public MoviesController(MvcMovieContext context, TelemetryClient telemetryClient)
         {
             _context = context;
+            _telemetryClient = telemetryClient;
         }
 
         // GET: Movies
         public async Task<IActionResult> Index()
         {
+            _telemetryClient.TrackEvent("MoviesController.Index");
+            _telemetryClient.TrackException(new Exception("MoviesController.Index exception"), new Dictionary<string, string> { { "myProp", "my value" } });
+            var env = Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING");
+            HttpContext.Features.Get<RequestTelemetry>().Properties["myProp"] = "my value";
             return View(await _context.Movie.ToListAsync());
         }
 
